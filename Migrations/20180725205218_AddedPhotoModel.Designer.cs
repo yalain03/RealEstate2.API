@@ -2,15 +2,17 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using RealEstate.API.Data;
 
 namespace RealEstate.API.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20180725205218_AddedPhotoModel")]
+    partial class AddedPhotoModel
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -51,8 +53,6 @@ namespace RealEstate.API.Migrations
 
                     b.Property<int>("HouseId");
 
-                    b.Property<bool>("IsMain");
-
                     b.Property<string>("PublicId");
 
                     b.Property<string>("Url");
@@ -73,8 +73,6 @@ namespace RealEstate.API.Migrations
 
                     b.Property<DateTime>("DateOfBirth");
 
-                    b.Property<string>("Email");
-
                     b.Property<string>("FirstName");
 
                     b.Property<string>("Gender");
@@ -85,32 +83,11 @@ namespace RealEstate.API.Migrations
 
                     b.Property<byte[]>("PasswordSalt");
 
-                    b.Property<string>("Phone");
-
                     b.Property<string>("Username");
 
                     b.HasKey("Id");
 
                     b.ToTable("Users");
-                });
-
-            modelBuilder.Entity("RealEstate.API.Models.UserPhoto", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<string>("PublicId");
-
-                    b.Property<string>("Url");
-
-                    b.Property<int>("UserId");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UserId")
-                        .IsUnique();
-
-                    b.ToTable("UserPhoto");
                 });
 
             modelBuilder.Entity("RealEstate.API.Models.Value", b =>
@@ -138,14 +115,6 @@ namespace RealEstate.API.Migrations
                     b.HasOne("RealEstate.API.Models.House", "House")
                         .WithMany("Photos")
                         .HasForeignKey("HouseId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("RealEstate.API.Models.UserPhoto", b =>
-                {
-                    b.HasOne("RealEstate.API.Models.User", "User")
-                        .WithOne("UserPhoto")
-                        .HasForeignKey("RealEstate.API.Models.UserPhoto", "UserId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 #pragma warning restore 612, 618

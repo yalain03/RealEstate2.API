@@ -2,15 +2,17 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using RealEstate.API.Data;
 
 namespace RealEstate.API.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20180725210203_AddedUserPhotoModel")]
+    partial class AddedUserPhotoModel
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -51,8 +53,6 @@ namespace RealEstate.API.Migrations
 
                     b.Property<int>("HouseId");
 
-                    b.Property<bool>("IsMain");
-
                     b.Property<string>("PublicId");
 
                     b.Property<string>("Url");
@@ -73,8 +73,6 @@ namespace RealEstate.API.Migrations
 
                     b.Property<DateTime>("DateOfBirth");
 
-                    b.Property<string>("Email");
-
                     b.Property<string>("FirstName");
 
                     b.Property<string>("Gender");
@@ -84,8 +82,6 @@ namespace RealEstate.API.Migrations
                     b.Property<byte[]>("PasswordHash");
 
                     b.Property<byte[]>("PasswordSalt");
-
-                    b.Property<string>("Phone");
 
                     b.Property<string>("Username");
 
