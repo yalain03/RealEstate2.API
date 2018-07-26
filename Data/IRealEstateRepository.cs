@@ -11,5 +11,8 @@ namespace RealEstate.API.Data
         Task<bool> SaveAll();
         Task<User> GetUser(int id);
         Task<IEnumerable<House>> GetHouses();
+        Task<House> GetHouse(int id);
+        Task<IEnumerable<House>> GetHousesForUser(int userId);
+        Task<Photo> GetPhoto(int id);
     }
 }

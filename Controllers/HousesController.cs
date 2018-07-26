@@ -1,7 +1,9 @@
+using System;
 using System.Collections.Generic;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using RealEstate.API.Data;
 using RealEstate.API.Dtos;
@@ -31,11 +33,34 @@ namespace RealEstate.API.Controllers
             return Ok(housesToReturn);
         }
 
-        [HttpPost("{userId}")]
+        [HttpGet("{houseId}")]
+        public async Task<IActionResult> GetHouse(int houseId)
+        {
+            var houseFromRepo = await _repo.GetHouse(houseId);
+
+            var houseToReturn = _mapper.Map<HouseForDetailedDto>(houseFromRepo);
+
+            return Ok(houseToReturn);
+        }
+
+        [Authorize]
+        [HttpGet("users/{userId}")]
+        public async Task<IActionResult> GetHousesForUser(int userId)
+        {
+            var housesFromRepo = await _repo.GetHousesForUser(userId);
+
+            var housesToReturn = _mapper.Map<IEnumerable<HousesForListDto>>(housesFromRepo);
+
+            return Ok(housesToReturn);
+        }
+
+        [Authorize]
+        [HttpPost("user/{userId}")]
         public async Task<IActionResult> CreateHouse(int userId, [FromBody]HouseForCreationDto houseDto)
         {
-            if(userId != int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value))
-                return Unauthorized();
+            // var cred = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+            // if(userId != cred)
+            //     return Unauthorized();
 
             houseDto.UserId = userId;
 

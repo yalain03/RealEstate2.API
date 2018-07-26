@@ -17,6 +17,8 @@ namespace RealEstate.API.Helpers
                     opt.MapFrom(src => src.Photos.FirstOrDefault(p => p.IsMain).Url);
                 });
             CreateMap<UserPhoto, UserPhotoForDetailedDto>();
+            CreateMap<PhotosForCreationDto, Photo>();
+            CreateMap<Photo, PhotoForReturnDto>();
         }
     }
 }
