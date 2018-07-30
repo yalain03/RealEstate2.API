@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using RealEstate.API.Dtos;
+using RealEstate.API.Helpers;
 using RealEstate.API.Models;
 
 namespace RealEstate.API.Data
@@ -31,25 +32,28 @@ namespace RealEstate.API.Data
             return user; 
         }
 
-        public async Task<IEnumerable<House>> GetHouses()
+        public async Task<PagedList<House>> GetHouses(UserParams userParams)
         {
-            return await _context.Houses.Where(h => h.Sold == false).ToListAsync();
+            var houses = _context.Houses.Where(h => h.Sold == false);
+
+            return await PagedList<House>.CreateAsync(houses, userParams.PageNumber, userParams.PageSize);
         }
 
         public async Task<House> GetHouse(int id)
         {
             var house = await _context.Houses
                 .Include(h => h.Photos)
+                .Include(h => h.User)
                 .FirstOrDefaultAsync(h => h.Id == id);
 
             return house;
         }
 
-        public async Task<IEnumerable<House>> GetHousesForUser(int userId)
+        public async Task<PagedList<House>> GetHousesForUser(int userId, UserParams userParams)
         {
-            var houses = await _context.Houses.Include(h => h.Photos).ToListAsync();
+            var houses = _context.Houses.Where(h => h.UserId == userId);
 
-            return houses;
+            return await PagedList<House>.CreateAsync(houses, userParams.PageNumber, userParams.PageSize);
         }
 
         public async Task<Photo> GetPhoto(int id)
@@ -62,6 +66,6 @@ namespace RealEstate.API.Data
         public async Task<bool> SaveAll()
         {
             return await _context.SaveChangesAsync() > 0;
-        }        
+        }
     }
 }

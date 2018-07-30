@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using RealEstate.API.Data;
 using RealEstate.API.Dtos;
+using RealEstate.API.Helpers;
 using RealEstate.API.Models;
 
 namespace RealEstate.API.Controllers
@@ -24,11 +25,14 @@ namespace RealEstate.API.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetHouses()
+        public async Task<IActionResult> GetHouses([FromQuery]UserParams userParams)
         {
-            var housesFromRepo = await _repo.GetHouses();
+            var houses = await _repo.GetHouses(userParams);
 
-            var housesToReturn = _mapper.Map<IEnumerable<HousesForListDto>>(housesFromRepo);
+            var housesToReturn = _mapper.Map<IEnumerable<HousesForListDto>>(houses);
+
+            Response.AddPagination(houses.CurrentPage, houses.PageSize, 
+                houses.TotalCount, houses.TotalPages);
 
             return Ok(housesToReturn);
         }
@@ -45,9 +49,9 @@ namespace RealEstate.API.Controllers
 
         [Authorize]
         [HttpGet("users/{userId}")]
-        public async Task<IActionResult> GetHousesForUser(int userId)
+        public async Task<IActionResult> GetHousesForUser(int userId, [FromQuery]UserParams userParams)
         {
-            var housesFromRepo = await _repo.GetHousesForUser(userId);
+            var housesFromRepo = await _repo.GetHousesForUser(userId, userParams);
 
             var housesToReturn = _mapper.Map<IEnumerable<HousesForListDto>>(housesFromRepo);
 
