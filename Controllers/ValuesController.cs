@@ -9,7 +9,6 @@ using RealEstate.API.Data;
 
 namespace RealEstate.API.Controllers
 {
-    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class ValuesController : ControllerBase
