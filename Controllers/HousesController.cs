@@ -77,5 +77,22 @@ namespace RealEstate.API.Controllers
 
             return BadRequest("Error during house creation");
         }
+
+        [Authorize]
+        [HttpPut("update/{id}")]
+        public async Task<IActionResult> UpdateHouse(int id, [FromBody]HouseForCreationDto houseDto)
+        {
+            if(houseDto.UserId != int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value))
+                return Unauthorized();
+
+            var houseFromRepo = await _repo.GetHouse(id);
+
+            _mapper.Map(houseDto, houseFromRepo);
+
+            if(await _repo.SaveAll())
+                return NoContent();
+
+            return BadRequest("Error on house update");
+        }
     }
 }

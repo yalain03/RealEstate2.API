@@ -10,6 +10,7 @@ namespace RealEstate.API.Helpers
         public AutoMapperProfiles()
         {
             CreateMap<User, UserForDetailedDto>();
+            CreateMap<UserForRegisterDto, User>();
             CreateMap<Photo, PhotosForDetailedDto>();
             CreateMap<HouseForCreationDto, House>();
             CreateMap<House, HousesForListDto>()

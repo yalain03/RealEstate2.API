@@ -1,3 +1,4 @@
+using System.Security.Claims;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
@@ -29,6 +30,22 @@ namespace RealEstate.API.Controllers
             var userToReturn = _mapper.Map<UserForDetailedDto>(userFromRepo);
 
             return Ok(userToReturn);
+        }
+
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateUser(int id, [FromBody]UserForRegisterDto userDto)
+        {
+            if(id != int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value))
+                return Unauthorized();
+
+            var userFromRepo = await _repo.GetUser(id);
+
+            _mapper.Map(userDto, userFromRepo);
+
+            if(await _repo.SaveAll())
+                return NoContent();
+
+            return BadRequest("Error during personal info update");
         }
     }
 }
