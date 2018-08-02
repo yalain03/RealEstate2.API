@@ -37,7 +37,7 @@ namespace RealEstate.API.Controllers
             return Ok(housesToReturn);
         }
 
-        [HttpGet("{houseId}")]
+        [HttpGet("{houseId}", Name="GetHouse")]
         public async Task<IActionResult> GetHouse(int houseId)
         {
             var houseFromRepo = await _repo.GetHouse(houseId);
@@ -59,7 +59,7 @@ namespace RealEstate.API.Controllers
         }
 
         [Authorize]
-        [HttpPost("user/{userId}")]
+        [HttpPost("users/{userId}")]
         public async Task<IActionResult> CreateHouse(int userId, [FromBody]HouseForCreationDto houseDto)
         {
             // var cred = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
@@ -72,8 +72,10 @@ namespace RealEstate.API.Controllers
 
             _repo.Add(house);
 
-            if(await _repo.SaveAll())
-                return StatusCode(201);
+            if(await _repo.SaveAll()) {
+                var houseToReturn = _mapper.Map<HouseForDetailedDto>(house);
+                return CreatedAtRoute("GetHouse", new {id = house.Id}, houseToReturn);
+            }                
 
             return BadRequest("Error during house creation");
         }
