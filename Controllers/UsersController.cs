@@ -1,6 +1,7 @@
 using System.Security.Claims;
 using System.Threading.Tasks;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using RealEstate.API.Data;
 using RealEstate.API.Dtos;
@@ -32,6 +33,7 @@ namespace RealEstate.API.Controllers
             return Ok(userToReturn);
         }
 
+        [Authorize]
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateUser(int id, [FromBody]UserForRegisterDto userDto)
         {
@@ -46,6 +48,23 @@ namespace RealEstate.API.Controllers
                 return NoContent();
 
             return BadRequest("Error during personal info update");
+        }
+
+        [Authorize]
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteUser(int id)
+        {
+            if(id != int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value))
+                return Unauthorized();
+
+            var userFromRepo = await _repo.GetUser(id);
+
+            _repo.Delete(userFromRepo);
+
+            if(await _repo.SaveAll())
+                return NoContent();
+
+            return BadRequest("Error during user deletion");
         }
     }
 }

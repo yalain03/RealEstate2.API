@@ -89,5 +89,35 @@ namespace RealEstate.API.Controllers
 
             return BadRequest("Could not add photo");
         }
+
+        [Authorize]
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeletePhoto(int id)
+        {
+            var photoFromRepo = await _repo.GetPhoto(id);
+
+            if(photoFromRepo == null)
+                return NotFound("Photo not found");
+
+            if(photoFromRepo.PublicId != null)
+            {
+                var deleteParams = new DeletionParams(photoFromRepo.PublicId);
+
+                var result = _cloudinary.Destroy(deleteParams);
+
+                if(result.Result == "ok")
+                    _repo.Delete(photoFromRepo);
+            }
+
+            if(photoFromRepo.PublicId == null)
+            {
+                _repo.Delete(photoFromRepo);
+            }
+
+            if(await _repo.SaveAll())
+                return Ok();
+
+            return BadRequest("Error during photo deletion");
+        }
     }
 }

@@ -96,5 +96,25 @@ namespace RealEstate.API.Controllers
 
             return BadRequest("Error on house update");
         }
+
+        [Authorize]
+        [HttpDelete("user/{userId}/delete/{id}")]
+        public async Task<IActionResult> DeleteHouse(int id, int userId) 
+        {
+            if(userId != int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value))
+                return Unauthorized();
+
+            var houseFromRepo = await _repo.GetHouse(id);
+
+            if(houseFromRepo == null)
+                return NotFound("House not found!");
+
+            _repo.Delete(houseFromRepo);
+
+            if(await _repo.SaveAll())
+                return NoContent();
+
+            throw new Exception("Error during house deletion");
+        }
     }
 }
