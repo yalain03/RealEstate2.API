@@ -37,10 +37,10 @@ namespace RealEstate.API.Controllers
             return Ok(housesToReturn);
         }
 
-        [HttpGet("{houseId}", Name="GetHouse")]
-        public async Task<IActionResult> GetHouse(int houseId)
+        [HttpGet("{id}", Name="GetHouse")]
+        public async Task<IActionResult> GetHouse(int id)
         {
-            var houseFromRepo = await _repo.GetHouse(houseId);
+            var houseFromRepo = await _repo.GetHouse(id);
 
             var houseToReturn = _mapper.Map<HouseForDetailedDto>(houseFromRepo);
 
@@ -59,14 +59,12 @@ namespace RealEstate.API.Controllers
         }
 
         [Authorize]
-        [HttpPost("users/{userId}")]
+        [HttpPost("user/{userId}")]
         public async Task<IActionResult> CreateHouse(int userId, [FromBody]HouseForCreationDto houseDto)
         {
             // var cred = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
             // if(userId != cred)
             //     return Unauthorized();
-
-            houseDto.UserId = userId;
 
             var house = _mapper.Map<House>(houseDto);
 
