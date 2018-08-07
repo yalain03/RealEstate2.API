@@ -11,6 +11,7 @@ namespace RealEstate.API.Helpers
         {
             CreateMap<User, UserForDetailedDto>();
             CreateMap<UserForRegisterDto, User>();
+            CreateMap<UserForUpdateDto, User>();
             CreateMap<Photo, PhotosForDetailedDto>();
             CreateMap<HouseForCreationDto, House>();
             CreateMap<House, HousesForListDto>()

@@ -79,18 +79,21 @@ namespace RealEstate.API.Controllers
         }
 
         [Authorize]
-        [HttpPut("update/{id}")]
+        [HttpPut("{id}")]
         public async Task<IActionResult> UpdateHouse(int id, [FromBody]HouseForCreationDto houseDto)
         {
-            if(houseDto.UserId != int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value))
-                return Unauthorized();
+            if(!ModelState.IsValid)
+                return BadRequest(ModelState);
 
             var houseFromRepo = await _repo.GetHouse(id);
+
+            if(houseFromRepo == null)
+                return BadRequest("House does not exist!");
 
             _mapper.Map(houseDto, houseFromRepo);
 
             if(await _repo.SaveAll())
-                return NoContent();
+                return Ok();
 
             return BadRequest("Error on house update");
         }

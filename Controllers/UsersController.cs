@@ -35,7 +35,7 @@ namespace RealEstate.API.Controllers
 
         [Authorize]
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateUser(int id, [FromBody]UserForRegisterDto userDto)
+        public async Task<IActionResult> UpdateUser(int id, [FromBody]UserForUpdateDto userDto)
         {
             if(id != int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value))
                 return Unauthorized();
