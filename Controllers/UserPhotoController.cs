@@ -36,7 +36,7 @@ namespace RealEstate.API.Controllers
             _cloudinary = new Cloudinary(acc);
         }
 
-        [HttpGet("{id}", Name="GetPhoto")]
+        [HttpGet("{id}", Name="GetUserPhoto")]
         public async Task<IActionResult> GetPhoto(int id)
         {
             var photoFromRepo = await _repo.GetPhoto(id);
@@ -76,13 +76,15 @@ namespace RealEstate.API.Controllers
             photoDto.PublicId = uploadResult.PublicId;
 
             var photo = _mapper.Map<UserPhoto>(photoDto);
+            photo.User = userFromRepo;
+            photo.UserId  = userFromRepo.Id;
 
             userFromRepo.UserPhoto = photo;
 
             if(await _repo.SaveAll())
             {
-                var photoToReturn = _mapper.Map<PhotoForReturnDto>(photo);
-                return CreatedAtRoute("GetPhoto", new {id = photo.Id}, photoToReturn);
+                var photoToReturn = _mapper.Map<UserPhotoForDetailedDto>(photo);
+                return CreatedAtRoute("GetUserPhoto", new {id = photo.Id}, photoToReturn);
             }
 
             return BadRequest("Could not add photo");

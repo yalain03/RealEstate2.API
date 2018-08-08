@@ -21,6 +21,7 @@ namespace RealEstate.API.Helpers
             CreateMap<UserPhoto, UserPhotoForDetailedDto>();
             CreateMap<PhotosForCreationDto, Photo>();
             CreateMap<Photo, PhotoForReturnDto>();
+            CreateMap<UserPhotoForCreationDto, UserPhoto>();
         }
     }
 }
