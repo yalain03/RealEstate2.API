@@ -51,9 +51,12 @@ namespace RealEstate.API.Controllers
         [HttpGet("users/{userId}")]
         public async Task<IActionResult> GetHousesForUser(int userId, [FromQuery]UserParams userParams)
         {
-            var housesFromRepo = await _repo.GetHousesForUser(userId, userParams);
+            var houses = await _repo.GetHousesForUser(userId, userParams);
 
-            var housesToReturn = _mapper.Map<IEnumerable<HousesForListDto>>(housesFromRepo);
+            var housesToReturn = _mapper.Map<IEnumerable<HousesForListDto>>(houses);
+
+            Response.AddPagination(houses.CurrentPage, houses.PageSize, 
+                houses.TotalCount, houses.TotalPages);
 
             return Ok(housesToReturn);
         }
