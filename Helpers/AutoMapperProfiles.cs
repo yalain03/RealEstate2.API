@@ -14,6 +14,10 @@ namespace RealEstate.API.Helpers
             CreateMap<UserForUpdateDto, User>();
             CreateMap<Photo, PhotosForDetailedDto>();
             CreateMap<HouseForCreationDto, House>();
+            CreateMap<House, HouseForDetailedDto>()
+                .ForMember(dest => dest.PhotoUrl, opt => {
+                    opt.MapFrom(src => src.Photos.FirstOrDefault(p => p.IsMain).Url);
+                });
             CreateMap<House, HousesForListDto>()
                 .ForMember(dest => dest.PhotoUrl, opt => {
                     opt.MapFrom(src => src.Photos.FirstOrDefault(p => p.IsMain).Url);

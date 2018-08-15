@@ -11,6 +11,7 @@ namespace RealEstate.API.Dtos
         public string Street { get; set; }
         public string City { get; set; }
         public string State { get; set; }
+        public string PhotoUrl { get; set; }
         public UserForDetailedDto User { get; set; }
         public IEnumerable<PhotosForDetailedDto> Photos { get; set; }
     }
