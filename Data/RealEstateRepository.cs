@@ -56,6 +56,7 @@ namespace RealEstate.API.Data
             var house = await _context.Houses
                 .Include(h => h.Photos)
                 .Include(h => h.User)
+                    .ThenInclude(u => u.UserPhoto)
                 .FirstOrDefaultAsync(h => h.Id == id);
 
             return house;
