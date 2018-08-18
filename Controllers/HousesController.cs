@@ -103,10 +103,10 @@ namespace RealEstate.API.Controllers
 
         [Authorize]
         [HttpDelete("user/{userId}/delete/{id}")]
-        public async Task<IActionResult> DeleteHouse(int id, int userId) 
+        public async Task<IActionResult> DeleteHouse(int userId, int id) 
         {
-            if(userId != int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value))
-                return Unauthorized();
+            // if(userId != int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value))
+            //     return Unauthorized();
 
             var houseFromRepo = await _repo.GetHouse(id);
 
