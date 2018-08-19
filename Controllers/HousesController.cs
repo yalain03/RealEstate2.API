@@ -26,7 +26,12 @@ namespace RealEstate.API.Controllers
 
         [HttpGet]
         public async Task<IActionResult> GetHouses([FromQuery]UserParams userParams)
-        {
+        {            
+            if(!string.IsNullOrEmpty(userParams.City))
+                userParams.City = userParams.City.ToLower();
+            if(!string.IsNullOrEmpty(userParams.State))
+                userParams.State = userParams.State.ToLower();
+
             var houses = await _repo.GetHouses(userParams);
 
             var housesToReturn = _mapper.Map<IEnumerable<HousesForListDto>>(houses);
@@ -50,7 +55,12 @@ namespace RealEstate.API.Controllers
         [Authorize]
         [HttpGet("users/{userId}")]
         public async Task<IActionResult> GetHousesForUser(int userId, [FromQuery]UserParams userParams)
-        {
+        {            
+            if(!string.IsNullOrEmpty(userParams.City))
+                userParams.City = userParams.City.ToLower();
+            if(!string.IsNullOrEmpty(userParams.State))
+                userParams.State = userParams.State.ToLower();
+
             var houses = await _repo.GetHousesForUser(userId, userParams);
 
             var housesToReturn = _mapper.Map<IEnumerable<HousesForListDto>>(houses);
@@ -70,6 +80,8 @@ namespace RealEstate.API.Controllers
             //     return Unauthorized();
 
             var house = _mapper.Map<House>(houseDto);
+            house.City = house.City.ToLower();
+            house.State = house.State.ToLower();
 
             _repo.Add(house);
 

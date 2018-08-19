@@ -121,5 +121,17 @@ namespace RealEstate.API.Controllers
 
             return BadRequest("Error during photo deletion");
         }
+
+        // [Authorize]
+        // [HttpPost("{id}/main")]
+        // public async Task<IActionResult> setMain(int houseId, int id) 
+        // {
+        //     var house = await _repo.GetHouse(houseId);
+
+        //     var photoFromRepo = house.Photos.Where(p => p.IsMain == true);
+
+            
+        //     return Ok("Worked");
+        // }
     }
 }

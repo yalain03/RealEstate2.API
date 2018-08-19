@@ -64,7 +64,18 @@ namespace RealEstate.API.Data
 
         public async Task<PagedList<House>> GetHousesForUser(int userId, UserParams userParams)
         {
-            var houses = _context.Houses.Include(h => h.Photos).Where(h => h.UserId == userId);
+            var houses = _context.Houses.Include(h => h.Photos).Where(h => h.UserId == userId && h.Sold == false);
+
+            if(userParams.Price > -1)
+                houses = houses.Where(h => h.Price <= userParams.Price);
+            if(userParams.Area > -1)
+                houses = houses.Where(h => h.Area >= userParams.Area);
+            if(userParams.Rooms > -1)
+                houses = houses.Where(h => h.Rooms >= userParams.Rooms);
+            if(!string.IsNullOrEmpty(userParams.City))
+                houses = houses.Where(h => h.City == userParams.City);
+            if(!string.IsNullOrEmpty(userParams.State))
+                houses = houses.Where(h => h.State == userParams.State);
 
             return await PagedList<House>.CreateAsync(houses, userParams.PageNumber, userParams.PageSize);
         }
