@@ -10,6 +10,7 @@ namespace RealEstate.API.Helpers
         public int Rooms { get; set; } = -1;
         public string City { get; set; }
         public string State { get; set; }
+        public string Available { get; set; }
         public int PageSize
         {
             get { return pageSize;}
