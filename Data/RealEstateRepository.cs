@@ -76,7 +76,8 @@ namespace RealEstate.API.Data
                 houses = houses.Where(h => h.City == userParams.City);
             if(!string.IsNullOrEmpty(userParams.State))
                 houses = houses.Where(h => h.State == userParams.State);
-            if(userParams.Available == "yes" || string.IsNullOrEmpty(userParams.Available))
+            if(userParams.Available == "yes" || string.IsNullOrEmpty(userParams.Available) ||
+                userParams.Available == "undefined")
                 houses = houses.Where(h => h.Sold == false);
             else
                 houses = houses.Where(h => h.Sold == true);
